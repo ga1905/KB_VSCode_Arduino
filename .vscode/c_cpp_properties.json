@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Win32",
-            "compilerPath": "C:/Users/Admin/AppData/Local/Arduino15/packages/esp32/tools/xtensa-esp32-elf-gcc/esp-13.2.0_20240530/bin/xtensa-esp32-elf-gcc.exe",
+            "compilerPath": "C:/Users/koson/AppData/Local/Arduino15/packages/esp32/tools/xtensa-esp32-elf-gcc/esp-2021r2-patch5-8.4.0/bin/xtensa-esp32-elf-gcc.exe",
             "compilerArgs": [
                 "-std=gnu++23",
                 "-Wpointer-arith",
@@ -29,10 +29,10 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "C:\\Users\\Admin\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.14\\**",
-                "C:\\Users\\Admin\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**",
+                "C:\\Users\\koson\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.14\\**",
+                "C:\\Users\\koson\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\**",
                 "${workspaceFolder}\\**",
-                "C:\\Users\\Admin\\Documents\\Arduino\\libraries\\**"
+                "C:\\Users\\koson\\Documents\\Arduino\\libraries\\**"
             ],
             "forcedInclude": [],
             "cStandard": "c11",

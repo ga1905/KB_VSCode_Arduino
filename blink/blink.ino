@@ -35,11 +35,17 @@ void setup() {
   // ส่งเสียง Beep เมื่อพร้อม
   beep();
   
+  pinMode(19, OUTPUT);
+  pinMode(21, OUTPUT);
+  pinMode(22, OUTPUT);
+
+
+  
   Serial.println("NKP_ONE Ready!");
 }
 
-void loop() {
-  // ===== ส่วนที่ 1: แสดงข้อความบน OLED =====
+void TestModules() {
+  // ฟังก์ชันทดสอบโมดูลต่างๆ
   set_oled_clear();
   set_oled(0, 0, "Test 1/4");
   set_oled(0, 10, "OLED OK!");
@@ -113,7 +119,21 @@ void loop() {
   beep();
   
   // รอกดปุ่ม SW1 เพื่อเริ่มใหม่
-  IO15();
+  IO15();  
+}
+
+void loop() 
+{
+  // blink LED บนขา 19 21 22 เป็นไฟวิ่ง
+  digitalWrite(19, HIGH);
+  delay(100);
+  digitalWrite(19, LOW);
+  digitalWrite(21, HIGH);
+  delay(100); 
+  digitalWrite(21, LOW);
+  digitalWrite(22, HIGH);
+  delay(100);
+  digitalWrite(22, LOW);
 }
 
 /*

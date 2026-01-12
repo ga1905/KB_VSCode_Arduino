@@ -40,9 +40,6 @@ arduino-cli core update-index
 arduino-cli core install esp32:esp32@2.0.14
 
 arduino-cli core list
-
-
-
 ```
 
 หรือ **คลิกขวาที่ setup.ps1 → Run with PowerShell**

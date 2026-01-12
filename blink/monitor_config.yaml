@@ -1,0 +1,7 @@
+port_settings:
+  baudrate: 115200
+  bits: 8
+  parity: none
+  stop_bits: 1
+  dtr: off
+  rts: off

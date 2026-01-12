@@ -21,6 +21,30 @@ cd D:\GitHubRepos\__kidbright\KB_VSCode_Arduino
 .\setup.ps1
 ```
 
+ถ้ายังไม่มี Arduino CLI ติดตั้งไว้ ให้รัน:
+
+```powershell
+winget install -e --id ArduinoSA.CLI
+```
+
+ติดตั้ง Arduino CLI สำเร็จแล้ว ตอนนี้ให้ตั้งค่าและติดตั้ง ESP32 board
+```
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"); arduino-cli version
+
+arduino-cli config init
+
+arduino-cli config add board_manager.additional_urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+
+arduino-cli core update-index
+
+arduino-cli core install esp32:esp32@2.0.14
+
+arduino-cli core list
+
+
+
+```
+
 หรือ **คลิกขวาที่ setup.ps1 → Run with PowerShell**
 
 ### ขั้นตอนที่ 2: ตอบคำถาม
@@ -133,6 +157,83 @@ Copy-Item -Path "example_project" -Destination "my_project" -Recurse
 - เลือกโค้ดที่มีปัญหา
 - กด `Ctrl + I` → "แก้ bug"
 
+## 🖥️ ใช้งานผ่าน Command Line (ไม่ต้องใช้ Extension)
+
+หาก Arduino Extension ใช้งานไม่ได้ คุณสามารถใช้ **arduino-cli** ผ่าน Command Line ได้เลย:
+
+### 📋 คำสั่งที่ใช้ได้
+
+#### 1. Build (Compile) โปรแกรม
+```powershell
+# Build โปรเจกต์ปัจจุบัน
+.\build.ps1
+
+# Build โปรเจกต์ที่ระบุ
+.\build.ps1 -SketchPath ".\blink"
+```
+
+#### 2. Upload โปรแกรม
+```powershell
+# Upload (จะถามว่าต้องการใช้ Port ไหน)
+.\upload.ps1
+
+# Upload ไปที่ Port ที่ระบุ
+.\upload.ps1 -Port COM13
+
+# Upload โปรเจกต์ที่ระบุ
+.\upload.ps1 -SketchPath ".\blink" -Port COM13
+```
+
+#### 3. Build + Upload ในคำสั่งเดียว
+```powershell
+# Build และ Upload
+.\build_upload.ps1
+
+# แบบระบุ Port
+.\build_upload.ps1 -Port COM13
+```
+
+#### 4. Serial Monitor
+```powershell
+# เปิด Serial Monitor
+.\monitor.ps1
+
+# เปิด Serial Monitor ที่ Port ที่ระบุ
+.\monitor.ps1 -Port COM13
+
+# เปิดด้วย Baud Rate ที่ต่างออกไป
+.\monitor.ps1 -Port COM13 -BaudRate 9600
+```
+
+#### 5. ตรวจสอบ Serial Ports
+```powershell
+# แสดงรายการ Serial Ports ที่พร้อมใช้งาน
+.\list_ports.ps1
+```
+
+### 🔄 Workflow ปกติ
+
+```powershell
+# 1. ดูว่ามี Port อะไรบ้าง
+.\list_ports.ps1
+
+# 2. Build และ Upload ในคำสั่งเดียว
+.\build_upload.ps1 -Port COM13
+
+# 3. เปิด Serial Monitor ดูผลลัพธ์
+.\monitor.ps1 -Port COM13
+```
+
+### ⚙️ ตั้งค่า Board แบบ Manual
+
+```powershell
+# Build สำหรับ ESP32 Dev Module (default)
+.\build.ps1 -Board "esp32:esp32:esp32"
+
+# Upload สำหรับ ESP32 Dev Module
+.\upload.ps1 -Port COM13 -Board "esp32:esp32:esp32"
+```
+
 ## 🆘 แก้ปัญหา
 
 ### ❌ PowerShell บล็อก script
@@ -156,11 +257,19 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Ctrl + Shift + P → Arduino: Rebuild IntelliSense Configuration
 ```
 
+### ❌ Arduino Extension ใช้งานไม่ได้
+ใช้ Command Line แทน (ดูหัวข้อ "ใช้งานผ่าน Command Line" ด้านบน)
+
 ## 📁 โครงสร้างโฟลเดอร์
 
 ```
 KB_VSCode_Arduino/
 ├── setup.ps1              # Script ติดตั้งอัตโนมัติ
+├── build.ps1              # Build (compile) ผ่าน CLI
+├── upload.ps1             # Upload ผ่าน CLI
+├── build_upload.ps1       # Build + Upload
+├── monitor.ps1            # Serial Monitor
+├── list_ports.ps1         # แสดง Serial Ports
 ├── example_project/       # โปรเจกต์ตัวอย่าง
 │   ├── NKP_ONE_Example.ino
 │   ├── .vscode/
@@ -177,6 +286,7 @@ KB_VSCode_Arduino/
 
 ## 🎓 เริ่มต้นใช้งาน
 
+### แบบใช้ VS Code + Extension
 ```powershell
 # 1. รัน setup
 .\setup.ps1
@@ -190,12 +300,34 @@ code example_project
 Ctrl + Alt + U
 ```
 
+### แบบใช้ Command Line
+```powershell
+# 1. รัน setup
+.\setup.ps1
+
+# 2. เข้าโฟลเดอร์โปรเจกต์
+cd example_project
+
+# 3. Build และ Upload
+..\build_upload.ps1 -Port COM13
+
+# 4. เปิด Serial Monitor
+..\monitor.ps1 -Port COM13
+```
+
 ## 🌟 Tips
 
+### สำหรับ VS Code + Extension
 - ใช้ `Ctrl + Shift + P` เพื่อเปิด Command Palette
 - ใช้ `Ctrl + I` เพื่อ Chat กับ Copilot
 - เปิด Serial Monitor: `Ctrl + Shift + P` → `Arduino: Open Serial Monitor`
 - Build: `Ctrl + Alt + R`
 - Upload: `Ctrl + Alt + U`
+
+### สำหรับ Command Line
+- ใช้ `.\list_ports.ps1` เช็ค Port ก่อนเสมอ
+- ใช้ `.\build_upload.ps1` สำหรับ Build + Upload ในคำสั่งเดียว
+- กด `Ctrl+C` เพื่อออกจาก Serial Monitor
+- สามารถกำหนด Port เป็น parameter ได้: `-Port COM13`
 
 **ขอให้สนุกกับการเขียนโค้ด! 🚀**

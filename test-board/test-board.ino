@@ -23,15 +23,36 @@ void setup() {
   
   Serial.println("NKP_ONE Ready!");
  
-     motor(1,20);	motor(2, 20);
+  Ref00 = 0;
+  Ref01 = 0;
+  Ref02 = 0;
+  Ref03 = 0;
+  Ref04 = 0;
+  Ref05 = 0;
+  Ref06 = 0;
+  Ref07 = 0;
+  
+     motor(1,30);	motor(2, 30);
   delay(1000);
   ao();
    delay(1000);
-  motor(1,  -20);	motor(2,  -20);
+  motor(1, -30);	motor(2,  -30);
   delay(1000);
   ao();
+  motor(1, 30); motor(2, -30);
+  delay(1000);
+  ao();
+   delay(1000);
 
 
+  set_oled(0, 20, "0 degree");
+  servo(1, 0);
+  delay(1000);
+  
+  // หมุนไป 90 องศา
+  set_oled(0, 20, "90 degree");
+  servo(1, 90);
+  delay(1000);
  
 
 }

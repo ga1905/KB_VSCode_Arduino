@@ -16,6 +16,37 @@
 
 #include <NKP_ONE.h>
 
+void releaseBlock()
+{
+       // ===== ส่วนที่ 3: ทดสอบ Servo =====
+  set_oled_clear();
+  set_oled(0, 10, "Test 3/4");
+  set_oled(0, 10, "Servo Test");
+  
+  // หมุนไป 0 องศา
+  set_oled(0, 20, "0 degree");
+  servo(1, 0);
+  delay(1000);
+  
+  // หมุนไป 90 องศา
+  set_oled(0, 20, "90 degree");
+  servo(1, 90);
+  delay(1000);
+  
+ /* // หมุนไป 180 องศา
+  set_oled(0, 20, "180 degree");
+  servo(1, 180);
+  delay(1000);
+  
+  // กลับมา 90 องศา
+  set_oled(0, 20, "90 degree");
+  servo(1, 90);
+  delay(1000);
+*/
+}
+
+
+
 void setup() {
   // เริ่มต้น Serial สำหรับ Debug
   Serial.begin(115200);
@@ -34,105 +65,140 @@ void setup() {
   
   // ส่งเสียง Beep เมื่อพร้อม
   beep();
+
+  //turnleft();
   
   Serial.println("NKP_ONE Ready!");
-  #BLOCKSETUP
-    motor(1, 1, 50);	motor(2, 1, 50);
-  delay(500);
-  ao();
-  motor(1, 1, 50);	motor(2, 1, 50);
-  delay(500);
-  ao();
-  motor(1, 1, 50);	motor(2, 1, 50);
-  delay(500);
-  ao();
-  motor(1, 2, 50);	motor(2, 1, 50);
-  delay(500);
-  motor(1, 1, 50);	motor(2, 1, 50);
-  delay(500);
-  ao();
-
-#END
-
+  // releaseBlock();
+  delay(2000);
 }
 
-void loop() {
-  // ===== ส่วนที่ 1: แสดงข้อความบน OLED =====
-  set_oled_clear();
-  set_oled(0, 0, "Test 1/4");
-  set_oled(0, 10, "OLED OK!");
-  delay(2000);
-  
-  // ===== ส่วนที่ 2: ทดสอบมอเตอร์ =====
-  set_oled_clear();
-  set_oled(0, 0, "Test 2/4");
-  set_oled(0, 10, "Motor Test");
-  
-  // เดินหน้า 2 วินาที
-  set_oled(0, 20, "Forward...");
-  motor(1, 70);
-  motor(2, 70);
-  delay(2000);
-  
-  // หยุด
-  set_oled(0, 20, "Stop");
-  motor(1, 0);
-  motor(2, 0);
-  delay(1000);
-  
-  // ===== ส่วนที่ 3: ทดสอบ Servo =====
-  set_oled_clear();
-  set_oled(0, 0, "Test 3/4");
-  set_oled(0, 10, "Servo Test");
-  
-  // หมุนไป 0 องศา
-  set_oled(0, 20, "0 degree");
-  servo(1, 0);
-  delay(1000);
-  
-  // หมุนไป 90 องศา
-  set_oled(0, 20, "90 degree");
-  servo(1, 90);
-  delay(1000);
-  
-  // หมุนไป 180 องศา
-  set_oled(0, 20, "180 degree");
-  servo(1, 180);
-  delay(1000);
-  
-  // กลับมา 90 องศา
-  servo(1, 90);
-  
-  // ===== ส่วนที่ 4: อ่านค่า Analog =====
-  set_oled_clear();
-  set_oled(0, 0, "Test 4/4");
-  set_oled(0, 10, "Analog Read");
-  
-  for (int i = 0; i < 10; i++) {
-    int value = analog(A0);
+bool reachedCP1 = false;
+
+void loop() 
+{
+  int value = analog(A0);
+    // set_oled_clear();
+    // set_oled(0, 0, "Test 4/4");
+    // set_oled(0, 10, "A0 Value:");
+    // set_oled(0, 20, value);
+    if(reachedCP1 == false)  
+    {  
+        Serial.println("FWD");
+        motor(1, 20);	motor(2, 19);
+    }
+
+    //int value = analog(A0);
+    // set_oled_clear();
+    // set_oled(0, 0, "Test 4/4");
+    // set_oled(0, 10, "A0 Value:");
+    // set_oled(0, 20, value);
     
-    set_oled_clear();
-    set_oled(0, 0, "Test 4/4");
-    set_oled(0, 10, "A0 Value:");
-    set_oled(0, 20, value);
-    
-    Serial.print("A0: ");
-    Serial.println(value);
-    
-    delay(500);
-  }
-  
-  // ===== เสร็จสิ้นการทดสอบ =====
-  set_oled_clear();
-  set_oled(0, 0, "All Tests");
-  set_oled(0, 10, "Complete!");
-  set_oled(0, 20, "Press SW1");
-  
-  beep();
-  
-  // รอกดปุ่ม SW1 เพื่อเริ่มใหม่
-  IO15();
+
+    if(value < 100 && reachedCP1 == false)
+    {
+      Serial.println("REACHED CP1");
+      reachedCP1 = true;
+      motor(1, 0);	motor(2, 0);
+      releaseBlock();
+    }
+      delay(20);
 }
+
+void turnleft()
+{
+  motor(1, -50);	motor(2, 50);
+  delay(450);
+  motor(1, 0);	motor(2, 0);
+}
+
+void turnright()
+{
+  motor(1, 50);	motor(2, -50);
+  delay(450);
+  motor(1, 0);	motor(2, 0);
+}
+
+
+
+
+// void loop() {
+//   // ===== ส่วนที่ 1: แสดงข้อความบน OLED =====
+//   set_oled_clear();
+//   set_oled(0, 0, "Test 1/4");
+//   set_oled(0, 10, "OLED OK!");
+//   delay(2000);
+  
+//   // ===== ส่วนที่ 2: ทดสอบมอเตอร์ =====
+//   set_oled_clear();
+//   set_oled(0, 0, "Test 2/4");
+//   set_oled(0, 10, "Motor Test");
+  
+//   // // เดินหน้า 2 วินาที
+//   // set_oled(0, 20, "Forward...");
+//   // motor(1, 20);
+//   // motor(2, 20);
+//   // delay(2000);
+  
+//   // // หยุด
+//   // set_oled(0, 20, "Stop");
+//   // motor(1, 0);
+//   // motor(2, 0);
+//   // delay(1000);
+  
+//   // ===== ส่วนที่ 3: ทดสอบ Servo =====
+//   set_oled_clear();
+//   set_oled(0, 0, "Test 3/4");
+//   set_oled(0, 10, "Servo Test");
+  
+//   // หมุนไป 0 องศา
+//   set_oled(0, 20, "0 degree");
+//   servo(1, 0);
+//   delay(1000);
+  
+//   // หมุนไป 90 องศา
+//   set_oled(0, 20, "90 degree");
+//   servo(1, 90);
+//   delay(1000);
+  
+//   // หมุนไป 180 องศา
+//   set_oled(0, 20, "180 degree");
+//   servo(1, 180);
+//   delay(1000);
+  
+//   // กลับมา 90 องศา
+//   servo(1, 90);
+  
+//   // ===== ส่วนที่ 4: อ่านค่า Analog =====
+//   set_oled_clear();
+//   set_oled(0, 0, "Test 4/4");
+//   set_oled(0, 10, "Analog Read");
+  
+//   for (int i = 0; i < 10; i++) {
+//     int value = analog(A0);
+    
+//     set_oled_clear();
+//     set_oled(0, 0, "Test 4/4");
+//     set_oled(0, 10, "A0 Value:");
+//     set_oled(0, 20, value);
+    
+//     Serial.print("A0: ");
+//     Serial.println(value);
+    
+//     delay(500);
+//   }
+  
+//   // ===== เสร็จสิ้นการทดสอบ =====
+//   set_oled_clear();
+//   set_oled(0, 0, "All Tests");
+//   set_oled(0, 10, "Complete!");
+//   set_oled(0, 20, "Press SW1");
+  
+//   beep();
+  
+//   // รอกดปุ่ม SW1 เพื่อเริ่มใหม่
+//   IO15();
+// }
 
 /*
  * ===== ตัวอย่างฟังก์ชันเพิ่มเติม =====

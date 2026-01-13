@@ -66,8 +66,10 @@ void setup() {
   // ส่งเสียง Beep เมื่อพร้อม
   beep();
 
+  colorsensorTest();
+
   //turnleft();
-  
+
   Serial.println("NKP_ONE Ready!");
   // releaseBlock();
   delay(2000);
@@ -75,9 +77,12 @@ void setup() {
 
 bool reachedCP1 = false;
 
+
+
 void loop() 
 {
-  int value = analog(A0);
+
+  int value00 = analog(A0);
     // set_oled_clear();
     // set_oled(0, 0, "Test 4/4");
     // set_oled(0, 10, "A0 Value:");
@@ -95,7 +100,7 @@ void loop()
     // set_oled(0, 20, value);
     
 
-    if(value < 100 && reachedCP1 == false)
+    if(value00 < 100 && reachedCP1 == false)
     {
       Serial.println("REACHED CP1");
       reachedCP1 = true;
@@ -119,6 +124,43 @@ void turnright()
   motor(1, 0);	motor(2, 0);
 }
 
+// Color Sensor Test - Call this from loop() if needed
+/*void colorsensorTest()
+{
+  int sensorPins[] = {39, 34, 32, 35, 25, 33, 27, 26};
+  int sensorValue[8];
+
+  setSensorPins(sensorPins, 8);
+  setCalibrate();
+
+  Serial.println("=== LINE SENSOR DEBUG ===");
+  Serial.println("S1 = LEFTMOST , S8 = RIGHTMOST");
+  Serial.println("-------------------------");
+
+  // อ่านค่าเซนเซอร์
+  for (int i = 0; i < 8; i++) {
+    sensorValue[i] = analogRead(sensorPins[i]);
+  }
+
+  // แสดงผลทีละตัว ชัดๆ
+  Serial.println("Sensors:");
+  for (int i = 0; i < 8; i++) {
+    Serial.print("  S");
+    Serial.print(i + 1);
+    Serial.print(" (pin ");
+    Serial.print(sensorPins[i]);
+    Serial.print(") = ");
+    Serial.println(sensorValue[i]);
+  }
+
+  // แสดงตำแหน่งเส้น
+  int position = readline();
+  Serial.print("Position = ");
+  Serial.println(position);
+
+  Serial.println("=========================");
+  delay(500);
+}*/
 
 
 

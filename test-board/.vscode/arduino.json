@@ -1,0 +1,7 @@
+﻿{
+    "configuration":  "FlashFreq=80,UploadSpeed=921600,DebugLevel=none,EraseFlash=none,PartitionScheme=default",
+    "board":  "esp32:esp32:esp32",
+    "port":  "COM13",
+    "sketch":  "test-board.ino",
+    "output":  "../build"
+}
